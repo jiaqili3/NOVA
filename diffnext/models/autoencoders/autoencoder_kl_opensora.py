@@ -236,12 +236,12 @@ class AutoencoderKLOpenSora(ModelMixin, ConfigMixin, TilingMixin):
         self.post_quant_conv = post_quant_conv_type(latent_channels, latent_channels, 1)
         self.latent_dist = DiagonalGaussianDistribution
 
-    def scale_(self, x):
+    def scale_(self, x) -> torch.Tensor:
         """Scale the input latents."""
         x.add_(-self.config.shift_factor) if self.config.shift_factor else None
         return x.mul_(self.config.scaling_factor)
 
-    def unscale_(self, x):
+    def unscale_(self, x) -> torch.Tensor:
         """Unscale the input latents."""
         x.mul_(1 / self.config.scaling_factor)
         return x.add_(self.config.shift_factor) if self.config.shift_factor else x

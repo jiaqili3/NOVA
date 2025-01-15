@@ -16,7 +16,7 @@
 """Embedding layers."""
 
 import sys
-from typing import Tuple, Union
+from typing import List, Tuple, Union
 
 import numpy as np
 import scipy.stats as stats
@@ -145,6 +145,10 @@ class PatchEmbed(nn.Module):
         self.image_dim, self.patch_size = image_dim, patch_size
         self.proj = nn.Conv2d(image_dim, embed_dim, patch_size, patch_size)
 
+    @property
+    def hw(self) -> Tuple[int, int]:
+        return self.height, self.width
+
     def patchify(self, x) -> torch.Tensor:
         x = x.view(-1, self.image_dim, self.height, self.patch_size, self.width, self.patch_size)
         return x.permute(0, 2, 4, 3, 5, 1).flatten(1, 2).flatten(2, 4).contiguous()
@@ -213,6 +217,15 @@ class MaskEmbed(nn.Module):
         [nn.init.normal_(_, std=0.02) for _ in (self.bos_token, self.mask_token)]
         self.mask, self.attn_mask = None, None
         self.pred_ids, self.pred_pos, self.generator = None, 0, None
+
+    def get_attn_lens(
+        self, x: Union[torch.Tensor, Tuple[torch.Tensor]], c: torch.Tensor = None
+    ) -> List[int]:
+        """Return the attention length according to inputs."""
+        lens = [_.shape[1:3].numel() for _ in x] if isinstance(x, (tuple, list)) else []
+        lens += [x.size(2)] * x.size(1) if not isinstance(x, (tuple, list)) else []
+        lens[0] += c.size(1) if c is not None else 0
+        return lens
 
     def get_attn_mask(
         self, x: Union[torch.Tensor, Tuple[torch.Tensor]], c: torch.Tensor = None, persistent=True

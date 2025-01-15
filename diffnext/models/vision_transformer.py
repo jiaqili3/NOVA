@@ -22,6 +22,7 @@ from torch import nn
 from torch.utils.checkpoint import checkpoint as apply_ckpt
 
 from diffnext.models.embeddings import PatchEmbed, RotaryEmbed3D
+from diffnext.models.flex_attention import FlexAttentionCausal2D
 
 
 class MLP(nn.Module):
@@ -45,18 +46,20 @@ class Attention(nn.Module):
         self.num_heads, self.head_dim = num_heads, dim // num_heads
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
         self.proj = nn.Linear(dim, dim)
-        self.attn_mask, self.cache_kv, self.pe_func = None, None, None
+        self.attn_mask, self.cache_kv, self.pe_func, self.flex_attn = None, None, None, None
 
     def forward(self, x) -> torch.Tensor:
         qkv_shape = [-1, x.size(1), 3, self.num_heads, self.head_dim]
         q, k, v = self.qkv(x).view(qkv_shape).permute(2, 0, 3, 1, 4).unbind(dim=0)
         q, k = (self.pe_func(q), self.pe_func(k)) if self.pe_func else (q, k)
-        if self.cache_kv is not None:
+        if self.cache_kv is not None and self.cache_kv:
             if isinstance(self.cache_kv, list):
                 k = self.cache_kv[0] = torch.cat([self.cache_kv[0], k], dim=2)
                 v = self.cache_kv[1] = torch.cat([self.cache_kv[1], v], dim=2)
             else:
                 self.cache_kv = [k, v]
+        if self.flex_attn and self.flex_attn.offsets:
+            return self.proj(self.flex_attn(q, k, v).transpose(1, 2).flatten(2))
         o = nn.functional.scaled_dot_product_attention(q, k, v, attn_mask=self.attn_mask)
         return self.proj(o.transpose(1, 2).flatten(2))
 
@@ -110,6 +113,8 @@ class VisionTransformer(nn.Module):
         self.blocks = nn.ModuleList(Block(embed_dim, num_heads, mlp_ratio) for _ in range(depth))
         self.norm, self.mixer = nn.LayerNorm(embed_dim), nn.Identity()
         self.encoder_depth = len(self.blocks) // 2 if encoder_depth is None else encoder_depth
+        self.flex_attn = FlexAttentionCausal2D()
+        [setattr(blk.attn, "flex_attn", self.flex_attn) for blk in self.blocks]
 
     def prepare_pe(self, c=None, ids=None, pos=None) -> Tuple[callable, callable]:
         pad = 0 if c is None else c.size(1)

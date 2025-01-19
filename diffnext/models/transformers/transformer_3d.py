@@ -174,7 +174,8 @@ class Transformer3DModel(nn.Module):
         c = self.video_encoder.patch_embed(inputs["x"][:, :, : latent_length - 1])
         bov = self.mask_embed.bos_token.expand(bs, 1, c.size(-2), -1)
         c, pos = self.video_pos_embed(torch.cat([bov, c], dim=1)), None
-        pos = self.video_pos_embed.get_pos(latent_length, bs) if self.image_pos_embed else pos
+        if self.image_pos_embed:
+            pos = self.video_pos_embed.get_pos(c.size(1), bs, self.video_encoder.patch_embed.hw)
         attn_mask = self.mask_embed.get_attn_mask(c, inputs["c"]) if latent_length > 1 else None
         [setattr(blk.attn, "attn_mask", attn_mask) for blk in self.video_encoder.blocks]
         c = self.video_encoder(c.flatten(1, 2), inputs["c"], pos=pos)
@@ -184,7 +185,8 @@ class Transformer3DModel(nn.Module):
         # 2D masked autoregressive modeling (MAM).
         x = inputs["x"][:, :, :latent_length].transpose(1, 2).flatten(0, 1)
         z, bs = self.image_encoder.patch_embed(x), bs * latent_length
-        pos = self.image_pos_embed.get_pos(1, bs) if self.image_pos_embed else pos
+        if self.image_pos_embed:
+            pos = self.image_pos_embed.get_pos(1, bs, self.image_encoder.patch_embed.hw)
         z = self.image_encoder(self.mask_embed(z), c.reshape(bs, -1, c.size(-1)), pos=pos)
         # 1D token-wise diffusion modeling (MLP).
         video_shape = (latent_length, z.size(1)) if latent_length > 1 else None

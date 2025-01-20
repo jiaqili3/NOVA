@@ -20,7 +20,7 @@ from diffusers.models.modeling_utils import ModelMixin
 
 from diffnext.models.diffusion_mlp import DiffusionMLP
 from diffnext.models.embeddings import PosEmbed, VideoPosEmbed, RotaryEmbed3D
-from diffnext.models.embeddings import MaskEmbed, MotionEmbed, TextEmbed
+from diffnext.models.embeddings import MaskEmbed, MotionEmbed, TextEmbed, LabelEmbed
 from diffnext.models.normalization import AdaLayerNorm
 from diffnext.models.transformers.transformer_3d import Transformer3DModel
 from diffnext.models.vision_transformer import VisionTransformer
@@ -87,12 +87,15 @@ class NOVATransformer3DModel(Transformer3DModel, ModelMixin, ConfigMixin):
         if video_mixer_rank:
             video_mixer_rank = max(video_mixer_rank, 0)  # Use vanilla AdaLN if ``rank`` < 0.
             video_encoder.mixer = AdaLayerNorm(video_encoder.embed_dim, video_mixer_rank, eps=None)
+        if text_token_dim:
+            text_embed = TextEmbed(text_token_dim, image_encoder.embed_dim, text_token_len)
         super(NOVATransformer3DModel, self).__init__(
             video_encoder=video_encoder,
             image_encoder=image_encoder,
             image_decoder=image_decoder,
             mask_embed=MaskEmbed(image_encoder.embed_dim),
-            text_embed=TextEmbed(text_token_dim, image_encoder.embed_dim, text_token_len),
+            text_embed=text_embed if text_token_dim else None,
+            label_embed=LabelEmbed(image_encoder.embed_dim) if not text_token_dim else None,
             video_pos_embed=video_pos_embed,
             image_pos_embed=image_pos_embed,
             motion_embed=MotionEmbed(video_encoder.embed_dim) if video_base_size[0] > 1 else None,

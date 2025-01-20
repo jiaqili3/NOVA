@@ -32,6 +32,7 @@ class Transformer3DModel(nn.Module):
         image_decoder=None,
         mask_embed=None,
         text_embed=None,
+        label_embed=None,
         video_pos_embed=None,
         image_pos_embed=None,
         motion_embed=None,
@@ -44,6 +45,7 @@ class Transformer3DModel(nn.Module):
         self.image_decoder = image_decoder
         self.mask_embed = mask_embed
         self.text_embed = text_embed
+        self.label_embed = label_embed
         self.video_pos_embed = video_pos_embed
         self.image_pos_embed = image_pos_embed
         self.motion_embed = motion_embed

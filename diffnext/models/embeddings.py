@@ -206,6 +206,23 @@ class TextEmbed(nn.Module):
         return self.norm(self.proj(x))
 
 
+class LabelEmbed(nn.Module):
+    """Encode class labels into embeddings."""
+
+    def __init__(self, embed_dim, num_classes=1000, dropout=0.1):
+        super(LabelEmbed, self).__init__()
+        self.dropout, self.num_classes = dropout, num_classes
+        self.weight = nn.Parameter(torch.zeros(num_classes + (dropout > 0), embed_dim))
+        _, self.norm = nn.init.normal_(self.weight, std=0.02), nn.LayerNorm(embed_dim)
+
+    def forward(self, input_ids):
+        input_ids = input_ids.unsqueeze(-1) if input_ids.dim() == 1 else input_ids
+        if self.training and self.dropout > 0:
+            keep = torch.rand(input_ids.size(), device=input_ids.device).gt(self.dropout)
+            input_ids = input_ids.where(keep, self.num_classes)
+        return self.norm(self.weight[input_ids])
+
+
 class MaskEmbed(nn.Module):
     """Apply mask positions to input embeddings."""
 

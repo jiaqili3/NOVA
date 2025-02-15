@@ -20,6 +20,7 @@
 We present **NOVA** (**NO**n-Quantized **V**ideo **A**utoregressive Model), a model that enables autoregressive image/video generation with high efficiency. **NOVA** reformulates the video generation problem as non-quantized autoregressive modeling of temporal *frame-by-frame* prediction and spatial *set-by-set* prediction. **NOVA** generalizes well and enables diverse zero-shot generation abilities in one unified model.
 
 ## 🚀News
+- ```[Feb 2025]``` Released [Training Guide](./docs/training.md)
 - ```[Jan 2025]``` 🔥🔥🔥 **NOVA has been accepted by ICLR 2025!** 🔥🔥🔥
 - ```[Dec 2024]``` Released [Project Page](http://bitterdhg.github.io/NOVA_page)
 - ```[Dec 2024]``` Released 🤗 Online Demo (<a href="https://huggingface.co/spaces/BAAI/nova-d48w1024-sdxl1024"><b>T2I</b></a>, <a href="https://huggingface.co/spaces/BAAI/nova-d48w1024-osp480"><b>T2V</b></a>)
@@ -170,10 +171,9 @@ python scripts/app_nova_t2v.py --model "BAAI/nova-d48w1024-osp480" --device 0
 - [X] [Model zoo](#model-zoo)
 - [X] [Quick Start](#2-quick-start)
 - [X] [Gradio Demo](#3-gradio-demo)
-- [ ] Inference guide
-- [ ] Finetuning code
-- [ ] Training code
-- [ ] Evaluation code
+- [X] Inference guide
+- [X] Training guide
+- [ ] Evaluation guide
 - [ ] Prompt Writer
 - [ ] Larger model size
 - [ ] Additional downstream tasks: Image editing, Video editing, Controllable generation

@@ -15,5 +15,6 @@
 # ------------------------------------------------------------------------
 """Data components."""
 
+from diffnext.data import flex_pipelines
 from diffnext.data.builder import build_loader_train
 from diffnext.data.utils import get_dataset_size

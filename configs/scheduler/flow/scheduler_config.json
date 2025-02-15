@@ -1,6 +1,0 @@
-{
-  "_noise_class_name": "FlowMatchEulerDiscreteScheduler",
-  "_sample_class_name": "FlowMatchEulerDiscreteScheduler",
-  "num_train_timesteps": 1000,
-  "shift": 1.0
-}

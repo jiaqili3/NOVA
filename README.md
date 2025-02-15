@@ -171,8 +171,8 @@ python scripts/app_nova_t2v.py --model "BAAI/nova-d48w1024-osp480" --device 0
 - [X] [Model zoo](#model-zoo)
 - [X] [Quick Start](#2-quick-start)
 - [X] [Gradio Demo](#3-gradio-demo)
-- [X] Inference guide
-- [X] Training guide
+- [X] [Training guide](#4-train)
+- [ ] Inference guide
 - [ ] Evaluation guide
 - [ ] Prompt Writer
 - [ ] Larger model size

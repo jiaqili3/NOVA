@@ -1,36 +1,60 @@
 # Training Guide
 
-This guide provides step-by-step instructions on how to prepare and train the 'nova-d48w768-sdxl1024' model. The steps include downloading necessary weights, caching VAE latents, and executing the training process.
+This guide provides simple snippets to train diffnext models.
 
+# 1. Cache VAE latents
 
-# 1. Download VAE weight
+To optimize training workflow, we preprocess images or videos into VAE latents.
 
-The Variational Autoencoder (VAE) weight is essential for encoding images into a latent space representation, which significantly accelerates the training process and reduces GPU memory usage. Please download the required VAE weight from the following link:
+Following snippet can be used to cache image latents:
 
-- [🤗 HF link](https://huggingface.co/BAAI/nova-d48w768-sdxl1024)
+```python
+import os, codewithgpu, torch, PIL.Image, numpy as np
+from diffnext.models.autoencoders.autoencoder_kl import AutoencoderKL
 
-# 2. Caching VAE Latents
+device, dtype = torch.device("cuda"), torch.float16
+vae = AutoencoderKL.from_pretrained("/path/to/nova-d48w1024-sdxl1024/vae")
+vae = vae.to(device=device, dtype=dtype).eval()
 
-To optimize your training workflow, we preprocess images or videos into their latent representations. This preprocessing step is crucial for enhancing the efficiency of the training process.
+features = {"moments": "bytes", "caption": "string", "text": "string", "shape": ["int64"]}
+_, writer = os.makedirs("./img_dataset"), codewithgpu.RecordWriter("./img_dataset", features)
 
-Use the following script to cache image latents:
-
-```bash
-export PYTHONPATH=/path/to/NOVA
-
-python scripts/cashe_img_latent.py \
---img_path /path/to/NOVA/data/raw_data/sample_image.jpg \
---caption_path /path/to/NOVA/data/raw_data/prompt_img.txt \
---latent_path /path/to/NOVA/data/latent/nova-d48w768-sdxl1024 \
---vae /path/to/Weight/nova-d48w768-sdxl1024/vae \
---vae-batch-size 1 \
---raw_data_size 1024
+img = PIL.Image.open("./assets/sample_image.jpg")
+x = torch.as_tensor(np.array(img)[None, ...].transpose(0, 3, 1, 2)).to(device).to(dtype)
+with torch.no_grad():
+    x = vae.encode(x.sub(127.5).div(127.5)).latent_dist.parameters.cpu().numpy()[0]
+example = {"caption": "long caption", "text": "short text"}
+writer.write({"shape": x.shape, "moments": x.tobytes(), **example}), writer.close()
 ```
 
-# 3. Train the Model
-```bash
-export PYTHONPATH=/path/to/NOVA
+# 2. Generate model config
 
-python -u scripts/train.py  \
---cfg /path/to/NOVA/configs/train/nova_d48w1024/nova_d48w1024_1024px.yml
+To simplify arguments parsing, we use [YACS](https://github.com/rbgirshick/yacs) to enhance ``diffusers``.
+
+Following snippet provides simple T2I training arguments:
+
+```python
+from diffnext.config import cfg
+cfg.NUM_GPUS = 1
+cfg.PIPELINE.TYPE = "nova_train_t2i"
+cfg.MODEL.PRECISION = "bfloat16"
+cfg.MODEL.WEIGHTS = "/path/to/nova-d48w1024-sdxl1024"
+cfg.SOLVER.BASE_LR = 1e-4
+cfg.SOLVER.MAX_STEPS = 100
+cfg.SOLVER.EMA_EVERY = 100
+cfg.SOLVER.SNAPSHOT_EVERY = 100
+cfg.SOLVER.SNAPSHOT_PREFIX = "nova_d48w1024_1024px"
+cfg.TRAIN.DATASET = "./img_dataset"
+cfg.TRAIN.LOADER = "vae_train"
+cfg.TRAIN.BATCH_SIZE = 1
+cfg.TRAIN.CHECKPOINTING = 3  # 0,1,2,3
+cfg.TRAIN.MODEL_EMA = 0.98
+cfg.TRAIN.DEVICE_EMA = "cpu"  # "cpu", "cuda"
+open("./nova_d48w1024_1024px.yml", "w").write(str(cfg))
+```
+
+# 3. Train model
+
+```bash
+python -u scripts/train.py --cfg ./nova_d48w1024_1024px.yml
 ```

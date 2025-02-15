@@ -66,11 +66,14 @@ def get_pipeline_path(
     model_index = json.load(open(model_index))
     for k, v in module_dict.items():
         model_index.pop(k) if not v else None
-        os.symlink(v, os.path.join(target_path, k)) if v else None
+        try:
+            os.symlink(v, os.path.join(target_path, k)) if v else None
+        except FileExistsError:  # Some components may be provided.
+            pass
     for k, v in (module_config or {}).items():
         config_file = os.path.join(target_path, k, "config.json")
-        os.remove(config_file) if os.path.exists(config_file) else None
-        json.dump(v, open(config_file, "w"))
+        os.remove(config_file) if v and os.path.exists(config_file) else None
+        json.dump(v, open(config_file, "w")) if v else None
     json.dump(model_index, open(os.path.join(target_path, "model_index.json"), "w"))
     return target_path
 

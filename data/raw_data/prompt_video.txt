@@ -1,1 +1,0 @@
-Spheres of various colors, with the camera panning to the right.

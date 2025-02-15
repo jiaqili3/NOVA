@@ -1,0 +1,41 @@
+NUM_GPUS: 1
+MODEL:
+  PRECISION: "bfloat16"
+  WEIGHTS: "/share/project/denghaoge/Weight/nova-d48w768-sdxl1024"
+  CONFIG: {
+    "image_dim": 4,
+    "image_size": [1024, 1024],
+    "image_stride": 8,
+    "text_token_dim": 2560,
+    "text_token_len": 256,
+    "rotary_pos_embed": true,
+    "video_base_size": [1, 32, 32],
+    "image_base_size": [64, 64],
+    "arch": ["vit_d16w768", "vit_d32w768", "mlp_d6w768"],
+  }
+PIPELINE:
+  TYPE: "nova_train_t2i"
+  MODULES: {
+    # 
+    # "scheduler": "/share/project/denghaoge/NOVA/configs/scheduler/flow",
+    # "text_encoder": "/share/project/denghaoge/Weight/nova-d48w768-sdxl1024/text_encoder/phi2",
+    # "tokenizer": "/share/project/denghaoge/Weight/nova-d48w768-sdxl1024/tokenizer/phi2",
+    # "vae": "/share/project/denghaoge/Weight/nova-d48w768-sdxl1024/vae/sdxl",
+    "model_index": "/share/project/denghaoge/NOVA/configs/model_index/flow_sdxl_phi2_nova.json",
+  }
+SOLVER:
+  BASE_LR: 0.0001
+  WEIGHT_DECAY: 0.02
+  WARM_UP_STEPS: 5000
+  MAX_STEPS: 2500000
+  EMA_EVERY: 100
+  SNAPSHOT_EVERY: 5000
+  SNAPSHOT_PREFIX: "nova_d48w768_512px"
+TRAIN:
+  DATASET: "/share/project/denghaoge/NOVA/data/latent/nova-d48w768-sdxl1024"
+  LOADER: "vae_train"
+  BATCH_SIZE: 1
+  CHECKPOINTING: 3
+  MODEL_EMA: 0.98
+  NUM_THREADS: 8
+

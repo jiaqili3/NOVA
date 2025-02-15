@@ -5,3 +5,4 @@ accelerate
 imageio[ffmpeg]
 pyyaml
 scipy
+codewithgpu

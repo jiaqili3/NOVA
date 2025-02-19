@@ -21,7 +21,7 @@ We present **NOVA** (**NO**n-Quantized **V**ideo **A**utoregressive Model), a mo
 
 ## 🚀News
 - ```[Feb 2025]``` Released [Training Guide](./docs/training.md)
-- ```[Jan 2025]``` 🔥🔥🔥 **NOVA has been accepted by ICLR 2025!** 🔥🔥🔥
+- ```[Jan 2025]``` Accepted by ICLR 2025 ([OpenReview Page](https://openreview.net/forum?id=JE9tCwe3lp)).
 - ```[Dec 2024]``` Released [Project Page](http://bitterdhg.github.io/NOVA_page)
 - ```[Dec 2024]``` Released 🤗 Online Demo (<a href="https://huggingface.co/spaces/BAAI/nova-d48w1024-sdxl1024"><b>T2I</b></a>, <a href="https://huggingface.co/spaces/BAAI/nova-d48w1024-osp480"><b>T2V</b></a>)
 - ```[Dec 2024]``` Released [paper](https://arxiv.org/abs/2412.14169), [weights](#model-zoo), and [Quick Start](#2-quick-start) guide and Gradio Demo [local code](#3-gradio-demo) .

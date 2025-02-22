@@ -31,7 +31,7 @@ _C.TRAIN.DATASET = ""
 _C.TRAIN.DATASET2 = ""
 
 # The loader type for training
-_C.TRAIN.LOADER = ""
+_C.TRAIN.LOADER = "vae_train"
 
 # The number of threads to load train data per GPU
 _C.TRAIN.NUM_THREADS = 4
@@ -42,14 +42,14 @@ _C.TRAIN.BATCH_SIZE = 1
 # The EMA decay to smooth the checkpoints
 _C.TRAIN.MODEL_EMA = 0.99
 
-# Device to place the EMA model ("" or "cpu")
-_C.TRAIN.DEVICE_EMA = ""
+# Device to place the EMA model ("cpu", "gpu")
+_C.TRAIN.DEVICE_EMA = "gpu"
 
 # Condition repeat factor to enlarge noise sampling
 _C.TRAIN.LOSS_REPEAT = 4
 
 # The model checkpointing level
-_C.TRAIN.CHECKPOINTING = 0
+_C.TRAIN.CHECKPOINTING = 2
 
 # ------------------------------------------------------------
 # Model options
@@ -94,7 +94,7 @@ _C.SOLVER.EMA_EVERY = 100
 _C.SOLVER.SNAPSHOT_EVERY = 5000
 
 # Prefix to yield the path: <prefix>_iter_XYZ
-_C.SOLVER.SNAPSHOT_PREFIX = ""
+_C.SOLVER.SNAPSHOT_PREFIX = "model"
 
 # Maximum number of SGD iterations
 _C.SOLVER.MAX_STEPS = 2147483647

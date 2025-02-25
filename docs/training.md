@@ -94,13 +94,8 @@ python scripts/train.py --cfg ./nova_d48w1024_480px.yml
 ```
 
 ## Train DeepSpeed model
-```python
-deepspeed_config = {"train_micro_batch_size_per_gpu": 1,
-                    "bf16": {"enabled": True}, "zero_optimization": {"stage": 2}}
-json.dump(open("./zero2_bf16.json", "w"), deepspeed_config)
-```
 ```bash
-python scripts/train.py --cfg ./nova_d48w1024_1024px.yml --deepspeed ./zero2_bf16.json
+python scripts/train.py --cfg ./nova_d48w1024_1024px.yml --deepspeed ./configs/deepspeed/zero2_bf16.json
 ```
 
 

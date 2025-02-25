@@ -20,6 +20,7 @@
 We present **NOVA** (**NO**n-Quantized **V**ideo **A**utoregressive Model), a model that enables autoregressive image/video generation with high efficiency. **NOVA** reformulates the video generation problem as non-quantized autoregressive modeling of temporal *frame-by-frame* prediction and spatial *set-by-set* prediction. **NOVA** generalizes well and enables diverse zero-shot generation abilities in one unified model.
 
 ## 🚀News
+- ```[Feb 2025]``` Released [Evaluation Guide](./docs/evaluation.md).
 - ```[Feb 2025]``` Released [Training Guide](./docs/training.md)
 - ```[Jan 2025]``` Accepted by ICLR 2025 ([OpenReview Page](https://openreview.net/forum?id=JE9tCwe3lp)).
 - ```[Dec 2024]``` Released [Project Page](http://bitterdhg.github.io/NOVA_page)

@@ -161,19 +161,19 @@ python scripts/app_nova_t2v.py --model "BAAI/nova-d48w1024-osp480" --device 0
 ## 4. Train
 - See [Training Guide](./docs/training.md)
 
-## 5. Inference
-- See [Inference Guide](./docs/inference.md)
-
-## 6. Evaluation
+## 5. Evaluation
 - See [Evaluation Guide](./docs/evaluation.md)
+
+## 6. Inference
+- See [Inference Guide](./docs/inference.md)
 
 ## 📋Todo List
 - [X] [Model zoo](#model-zoo)
 - [X] [Quick Start](#2-quick-start)
 - [X] [Gradio Demo](#3-gradio-demo)
 - [X] [Training guide](#4-train)
+- [X] [Evaluation guide](#5-evaluation)
 - [ ] Inference guide
-- [ ] Evaluation guide
 - [ ] Prompt Writer
 - [ ] Larger model size
 - [ ] Additional downstream tasks: Image editing, Video editing, Controllable generation

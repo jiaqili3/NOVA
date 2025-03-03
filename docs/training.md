@@ -98,4 +98,17 @@ python scripts/train.py --cfg ./nova_d48w1024_480px.yml
 python scripts/train.py --cfg ./nova_d48w1024_1024px.yml --deepspeed ./configs/deepspeed/zero2_bf16.json
 ```
 
+This script launches multi-nodes job using *hostfile*.
+
+Argument usage: 
+```bash
+python scripts/train.py --host /path/to/my_hostfile
+```
+
+Requirements:
+
+- The total number of slots accumulated in the *hostfile* should be equal to ``cfg.NUM_GPUS``.
+- The launcher machine must be able to SSH to all host machines with *passwordless login*.
+
+See [DeepSpeed's Doc](https://www.deepspeed.ai/getting-started/#resource-configuration-multi-node) for the hostfile details.
 

@@ -122,6 +122,9 @@ class VisionTransformer(nn.Module):
         pe1 = self.rope.get_func(pos, pad, ids.expand(-1, -1, 3)) if ids is not None else pe1
         return pe1, pe2
 
+    def enable_kvcache(self, mode=True):
+        [setattr(blk.attn, "cache_kv", mode) for blk in self.blocks]
+
     def forward(self, x, c=None, prev_ids=None, pos=None) -> torch.Tensor:
         x, prev_ids = x if isinstance(x, (tuple, list)) else (x, prev_ids)
         prev_ids = prev_ids if self.encoder_depth else None

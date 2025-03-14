@@ -150,7 +150,7 @@ class Transformer3DModel(nn.Module):
             time_pos = self.video_pos_embed.get_pos(max_latent_length).chunk(max_latent_length, 1)
         else:
             time_embed = self.video_pos_embed.get_time_embed(max_latent_length)
-        [setattr(blk.attn, "cache_kv", max_latent_length > 1) for blk in self.video_encoder.blocks]
+        self.video_encoder.enable_kvcache(max_latent_length > 1)
         for states["t"] in self.progress_bar(range(max_latent_length), inputs.get("tqdm1", True)):
             pos = time_pos[states["t"]] if time_pos else None
             c = self.video_encoder.patch_embed(states["x"])
@@ -166,7 +166,7 @@ class Transformer3DModel(nn.Module):
             else:
                 self.generate_frame(states, inputs)
                 latents.append(states["x"].clone())
-        [setattr(blk.attn, "cache_kv", False) for blk in self.video_encoder.blocks]
+        self.video_encoder.enable_kvcache(False)
 
     def train_video(self, inputs):
         """Train a batch of videos."""

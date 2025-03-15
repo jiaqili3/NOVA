@@ -38,8 +38,8 @@ class Trainer(object):
         self.precision = cfg.MODEL.PRECISION.lower()
         self.dtype = getattr(torch, self.precision)
         self.device_type = engine.get_device(0).type
-        pipe_conf = {cfg.MODEL.TYPE: cfg.MODEL.CONFIG}
-        pipe_path = get_pipeline_path(cfg.MODEL.WEIGHTS, cfg.PIPELINE.MODULES, pipe_conf)
+        pipe_conf = {cfg.MODEL.TYPE: cfg.MODEL.CONFIG} if cfg.MODEL.CONFIG else None
+        pipe_path = get_pipeline_path(cfg.MODEL.WEIGHTS, cfg.PIPELINE.MODULES or None, pipe_conf)
         self.pipe = build_pipeline(pipe_path, config=cfg)
         self.pipe = self.pipe.to(device=engine.get_device(cfg.GPU_ID))
         self.ema_model = engine.build_model_ema(self.pipe.model, cfg.TRAIN.MODEL_EMA)

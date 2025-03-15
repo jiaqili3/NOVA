@@ -37,7 +37,7 @@ class Transformer3DModel(nn.Module):
         image_pos_embed=None,
         motion_embed=None,
         noise_scheduler=None,
-        sample_schduler=None,
+        sample_scheduler=None,
     ):
         super(Transformer3DModel, self).__init__()
         self.video_encoder = video_encoder
@@ -50,7 +50,7 @@ class Transformer3DModel(nn.Module):
         self.image_pos_embed = image_pos_embed
         self.motion_embed = motion_embed
         self.noise_scheduler = noise_scheduler
-        self.sample_scheduler = sample_schduler
+        self.sample_scheduler = sample_scheduler
         self.pipeline_preprocess = lambda inputs: inputs
         self.loss_repeat = 4
 

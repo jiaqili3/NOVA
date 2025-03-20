@@ -17,5 +17,4 @@
 
 from diffnext.pipelines.builder import build_pipeline
 from diffnext.pipelines.builder import build_diffusion_scheduler
-from diffnext.pipelines.nova import NOVAPipeline
-from diffnext.pipelines.nova import NOVATrainT2IPipeline
+from diffnext.pipelines import nova as nova_pipelines

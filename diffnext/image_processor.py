@@ -52,6 +52,7 @@ class VaeImageProcessor(ConfigMixin):
         return image
 
     @staticmethod
+    @torch.no_grad()
     def decode_latents(vae: nn.Module, latents: torch.Tensor, vae_batch_size=1) -> torch.Tensor:
         """Decode VAE latents.
 

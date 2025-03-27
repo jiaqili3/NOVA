@@ -44,3 +44,19 @@ class AdaLayerNorm(AdaLayerNormZero):
 
     def forward(self, x, z) -> torch.Tensor:
         return super().forward(x, z)[0]
+
+
+class AdaLayerNormSingle(nn.Module):
+    """Adaptive LayerNorm with shared residual stats."""
+
+    def __init__(self, dim, num_stats=2, eps=1e-6):
+        super(AdaLayerNormSingle, self).__init__()
+        self.bias = nn.Parameter(torch.randn(num_stats, dim) / dim**0.5)
+        self.norm = nn.LayerNorm(dim, eps, elementwise_affine=False) if eps else nn.Identity()
+        self.num_stats = num_stats
+
+    def forward(self, x, z) -> Tuple[torch.Tensor, Tuple[torch.Tensor]]:
+        axis = -2 if z.size(-1) == self.bias.size(-1) else -1
+        bias = self.bias.flatten(-1 if z.size(-1) == self.bias.size(-1) else 0)
+        stats = z.add(bias).chunk(self.num_stats, dim=axis)
+        return self.norm(x).mul(1 + stats[0]).add_(stats[1]), stats[2:]

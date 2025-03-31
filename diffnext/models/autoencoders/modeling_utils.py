@@ -40,6 +40,8 @@ class DiagonalGaussianDistribution(object):
     def __init__(self, z):
         self.parameters = z
         self.device, self.dtype = z.device, z.dtype
+        if z.size(1) % 2:
+            z = torch.cat([z, z[:, -1:].expand((-1, z.shape[1] - 2) + (-1,) * (z.dim() - 2))], 1)
         self.mean, self.logvar = z.float().chunk(2, dim=1)
         self.logvar = self.logvar.clamp(-30.0, 20.0)
         self.std, self.var = self.logvar.mul(0.5).exp_(), self.logvar.exp()

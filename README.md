@@ -10,9 +10,9 @@
 </p>
 
 [Haoge Deng](https://scholar.google.com/citations?user=S2sbvjgAAAAJ&hl=zh-CN&oi=ao)<sup>1,4*</sup>, [Ting Pan](https://scholar.google.com/citations?&user=qQv6YbsAAAAJ)<sup>2,4*</sup>, [Haiwen Diao](https://scholar.google.com/citations?user=46eCjHQAAAAJ&hl=zh-CN)<sup>3,4*</sup>, [Zhengxiong Luo](https://scholar.google.com/citations?user=Sz1yTZsAAAAJ&hl=zh-CN)<sup>4*</sup>, [Yufeng Cui](https://scholar.google.com/citations?user=5Ydha2EAAAAJ&hl=zh-CN)<sup>4</sup><br>
-[Huchuan Lu](https://scholar.google.com/citations?user=D3nE0agAAAAJ&hl=zh-CN)<sup>3</sup>, [Shiguang Shan](https://scholar.google.com/citations?user=Vkzd7MIAAAAJ&hl=en)<sup>2</sup>, [Yonggang Qi](https://scholar.google.com.tw/citations?user=pQNpf7cAAAAJ&hl=zh-CN&oi=ao)<sup>1</sup>, [Xinlong Wang](https://scholar.google.com/citations?user=DPz0DjYAAAAJ&hl=zh-CN)<sup>4†</sup><br>
+[Huchuan Lu](https://scholar.google.com/citations?user=D3nE0agAAAAJ&hl=zh-CN)<sup>3</sup>, [Shiguang Shan](https://scholar.google.com/citations?user=Vkzd7MIAAAAJ&hl=en)<sup>2</sup>, [Yonggang Qi](https://scholar.google.com.tw/citations?user=pQNpf7cAAAAJ&hl=zh-CN&oi=ao)<sup>1†</sup>, [Xinlong Wang](https://scholar.google.com/citations?user=DPz0DjYAAAAJ&hl=zh-CN)<sup>4†</sup><br>
 
-[BUPT](https://www.bupt.edu.cn)<sup>1</sup>, [ICT-CAS](http://english.ict.cas.cn)<sup>2</sup>, [DLUT](https://en.dlut.edu.cn)<sup>3</sup>, [BAAI](https://www.baai.ac.cn/english.html)<sup>4</sup><br>
+[BUPT](https://www.bupt.edu.cn)<sup>1</sup>, [ICT-CAS](http://english.ict.cas.cn)<sup>2</sup>, [DLUT](https://en.dlut.edu.cn)<sup>3</sup>, [BAAI](https://www.baai.ac.cn/en)<sup>4</sup><br>
 <sup>*</sup> Equal Contribution, <sup>†</sup> Corresponding Author
 <br><br><image src="assets/model_overview.png"/>
 </div>

@@ -80,6 +80,7 @@ class NOVATrainT2VPipeline(DiffusionPipeline, PipelineMixin):
         if inputs.get("prompt", None) is not None and self.transformer.text_embed:
             inputs["c"].append(self.transformer.text_embed(inputs.pop("prompt")))
 
+    @torch.no_grad()
     def preprocess(self, inputs: Dict) -> Dict:
         """Define the pipeline preprocess at every call."""
         if not self.model.training:
